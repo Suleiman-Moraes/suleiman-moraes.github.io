@@ -1,0 +1,38 @@
+import { HELP_DESK_API_AUTH, HELP_DESK_API_USER } from './helpdesk.api';
+import { User } from './../model/user.model';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+
+  constructor(private http: HttpClient) { }
+
+  login(user: User) {
+    return this.http.post(`${HELP_DESK_API_AUTH}`, user);
+  }
+
+  createOrUpdate(user: User) {
+    if (user.id != null && user.id.trim() != '') {
+      return this.http.put(`${HELP_DESK_API_USER}`, user);
+    }
+    else {
+      user.id = null;
+      return this.http.post(`${HELP_DESK_API_USER}`, user);
+    }
+  }
+
+  findAll(page: number, count: number) {
+    return this.http.get(`${HELP_DESK_API_USER}/${page}/${count}`);
+  }
+
+  findById(id: string) {
+    return this.http.get(`${HELP_DESK_API_USER}/${id}`);
+  }
+
+  delete(id: string) {
+    return this.http.delete(`${HELP_DESK_API_USER}/${id}`);
+  }
+}
